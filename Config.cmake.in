@@ -1,17 +1,17 @@
 @PACKAGE_INIT@
 
-include("${CMAKE_CURRENT_LIST_DIR}/lightdaTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/hdf5_exceptionsTargets.cmake")
 
 include(CMakeFindDependencyMacro)
 
-if(NOT system_mpi_FOUND AND NOT TARGET system_mpi)
-  find_dependency(system_mpi REQUIRED)
+if(NOT HDF5_FOUND AND NOT TARGET hdf5::hdf5_fortran)
+  find_dependency(HDF5 COMPONENTS Fortran REQUIRED)
 endif()
 
 if(NOT fortran_exceptions_FOUND AND NOT TARGET fortran_exceptions)
   find_dependency(fortran_exceptions REQUIRED)
 endif()
 
-check_required_components(lightda)
+check_required_components(hdf5_exceptions)
 
-set(lightda_DOCDIR @CMAKE_INSTALL_PREFIX@/share/doc/lightda)
+set(hdf5_exceptions_DOCDIR @CMAKE_INSTALL_PREFIX@/share/doc/hdf5_exceptions)

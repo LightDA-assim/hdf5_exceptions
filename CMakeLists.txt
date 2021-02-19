@@ -1,15 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(lightda)
+project(hdf5_exceptions)
 
 enable_language(Fortran)
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/modules/")
-
 set(Fortran_MODULE_DIRECTORY include/fortran_modules/${CMAKE_Fortran_COMPILER_ID}/${CMAKE_Fortran_COMPILER_VERSION})
 set(CMAKE_Fortran_MODULE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${Fortran_MODULE_DIRECTORY})
-
-include(lightda_functions)
 
 if(CMAKE_Fortran_COMPILER_ID MATCHES "GNU")
   if(CMAKE_Fortran_COMPILER_VERSION VERSION_GREATER 9)
@@ -23,50 +19,35 @@ else()
   add_definitions(-DOVERRIDABLE_FINALIZERS)
 endif()
 
-find_package(system_mpi REQUIRED)
 find_package(fortran_exceptions REQUIRED)
 
 add_subdirectory(src)
 
-get_target_property(lightda_INTERFACE_INCLUDE_DIRECTORIES lightda INTERFACE_INCLUDE_DIRECTORIES)
-
-message("lightda_INTERFACE_INCLUDE_DIRECTORIES=${lightda_INTERFACE_INCLUDE_DIRECTORIES}")
-
-get_target_property(lightda_INCLUDE_DIRECTORIES lightda INCLUDE_DIRECTORIES)
-
-message("lightda_INCLUDE_DIRECTORIES=${lightda_INCLUDE_DIRECTORIES}")
-
-configure_file(animate.py animate.py COPYONLY)
-configure_file(animate_mpi.py animate_mpi.py COPYONLY)
-configure_file(advect1d.py advect1d.py COPYONLY)
-configure_file(enkf.py enkf.py COPYONLY)
-configure_file(libsuffix.py libsuffix.py COPYONLY)
-
 include(CMakePackageConfigHelpers)
 
 # Add all targets to the build-tree export set
-export(TARGETS lightda lightda_util lightda_random
-  FILE "${PROJECT_BINARY_DIR}/lightdaTargets.cmake")
+export(TARGETS hdf5_exceptions
+  FILE "${PROJECT_BINARY_DIR}/hdf5_exceptionsTargets.cmake")
 
 # Export the package for use from the build-tree
 # (this registers the build-tree with a global CMake-registry)
-export(PACKAGE lightda)
+export(PACKAGE hdf5_exceptions)
 
 configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
-  "${CMAKE_CURRENT_BINARY_DIR}/lightdaConfig.cmake"
-  INSTALL_DESTINATION lib/cmake/lightda
+  "${CMAKE_CURRENT_BINARY_DIR}/hdf5_exceptionsConfig.cmake"
+  INSTALL_DESTINATION lib/cmake/hdf5_exceptions
   )
 
 install(FILES
-          "${CMAKE_CURRENT_BINARY_DIR}/lightdaConfig.cmake"
-        DESTINATION lib/cmake/lightda
+          "${CMAKE_CURRENT_BINARY_DIR}/hdf5_exceptionsConfig.cmake"
+        DESTINATION lib/cmake/hdf5_exceptions
 )
 
 install(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY} DESTINATION ${Fortran_MODULE_DIRECTORY}/..)
 
-install(EXPORT lightda
-  FILE lightdaTargets.cmake
-  DESTINATION lib/cmake/lightda
+install(EXPORT hdf5_exceptions
+  FILE hdf5_exceptionsTargets.cmake
+  DESTINATION lib/cmake/hdf5_exceptions
 )
 
 # -------------------
@@ -81,9 +62,9 @@ if ( NOT SKIP_DOC_GEN )
   if(FORD)
 
     set(DOC_ROOT "${PROJECT_BINARY_DIR}/doc")
-    set(DOC_DIR "${DOC_ROOT}/lightda")
+    set(DOC_DIR "${DOC_ROOT}/hdf5_exceptions")
     set(PROJ_DIR "${PROJECT_SOURCE_DIR}")
-    set(FORD_PROJECT_FILE "${CMAKE_CURRENT_BINARY_DIR}/lightda.md")
+    set(FORD_PROJECT_FILE "${CMAKE_CURRENT_BINARY_DIR}/hdf5_exceptions.md")
     set(FORD_PROJECT_EXCLUDE_DIRS "${MPI_Fortran_INCLUDE_DIRS};${PROJECT_BINARY_DIR};${PROJ_DIR}/build;${PROJ_DIR}/tests;${PROJ_DIR}/sphinx")
     set(FORD_PROJECT_EXCLUDE_FILES "random.f90;random_integer.f90;tree.f90")
     set(MACRO_FLAG "")
@@ -91,7 +72,7 @@ if ( NOT SKIP_DOC_GEN )
     string(REPLACE ";" "\nexclude_dir:" FORD_PROJECT_EXCLUDE_DIRS "${FORD_PROJECT_EXCLUDE_DIRS}")
     string(REPLACE ";" "\nexclude:" FORD_PROJECT_EXCLUDE_FILES "${FORD_PROJECT_EXCLUDE_FILES}")
 
-    configure_file(lightda.md.in lightda.md)
+    configure_file(hdf5_exceptions.md.in hdf5_exceptions.md)
 
     # Pick the preprocessor to use based on the Fortran compiler
     if ( "${CMAKE_Fortran_COMPILER_ID}" MATCHES "Intel" )
@@ -126,7 +107,7 @@ if ( NOT SKIP_DOC_GEN )
     endif ()
     message ( STATUS "Done dynamically computing FORD outputs." )
 
-    foreach ( DOC_SRC_FILE ${PROJECT_BINARY_DIR}/lightda.md ${SYSTEM_MPI_SOURCES} ${UTIL_SOURCES} ${ASSIM_SOURCES} ${ASSIM_PARALLEL_SOURCES} ${ADVECT1D_ASSIMILATE_INTERFACES_SOURCES} ${ADVECT1D_ASSIMILATE_SOURCES} ${ADVECT1D_SOURCES} ${PAGES_FILES} )
+    foreach ( DOC_SRC_FILE ${PROJECT_BINARY_DIR}/hdf5_exceptions.md ${ALL_SOURCES} ${PAGES_FILES} )
       list ( APPEND FORD_DEPENDS "${DOC_SRC_FILE}" )
     endforeach ()
 
@@ -172,6 +153,3 @@ else()
     )
 
 endif()
-
-enable_testing()
-add_subdirectory(tests)
