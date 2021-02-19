@@ -30,6 +30,8 @@ make install
 
 ## Usage
 
+Projects built using CMake can load hdf5_exceptions using `find_package(hdf5_exceptions)`. Any targets that use hdf5_exceptions should be linked to the hdf5_exceptions library using `target_link_libraries`.
+
 HDF5_exceptions provides an [[hdf5_exception]] type representing a generic HDF5 error. An [[hdf5_exception]] is normally created by calling the [[new_hdf5_exception]] function with an HDF5 error code as an argument. This is the integer argument `hdferr` which passed to most HDF5 procedures. `hdferr` is populated with a negative value on error and zero on success. The error message is set to 'HDF5 exception' by default; this can be overridden with the `message` argument of [[new_hdf5_exception]]. If the `filename` argument is passed to [[new_hdf5_exception]], it will be added to the error message. For instance, `new_hdf5_exception(-1,'HDF5 error reading data',filename='data.h5')` will produce the message
 
 ```
