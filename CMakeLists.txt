@@ -50,6 +50,7 @@ configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 
 install(FILES
           "${CMAKE_CURRENT_BINARY_DIR}/hdf5_exceptionsConfig.cmake"
+          ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/HDF5Targets.cmake
         DESTINATION lib/cmake/hdf5_exceptions
 )
 

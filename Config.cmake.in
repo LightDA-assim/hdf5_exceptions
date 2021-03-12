@@ -8,6 +8,10 @@ if(NOT HDF5_FOUND AND NOT TARGET hdf5::hdf5_fortran)
   find_dependency(HDF5 COMPONENTS Fortran REQUIRED)
 endif()
 
+if(NOT TARGET hdf5::hdf5_fortran)
+  include("${CMAKE_CURRENT_LIST_DIR}/HDF5Targets.cmake")
+endif()
+
 if(NOT fortran_exceptions_FOUND AND NOT TARGET fortran_exceptions)
   find_dependency(fortran_exceptions REQUIRED)
 endif()
