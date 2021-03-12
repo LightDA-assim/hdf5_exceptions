@@ -27,7 +27,8 @@ if (HDF5_FOUND)
       string(REPLACE "-D" "" _hdf5_definitions "${HDF5_${hdf5_lang}_DEFINITIONS}")
       set_target_properties("hdf5::${hdf5_target_name}" PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${HDF5_${hdf5_lang}_INCLUDE_DIRS}"
-        INTERFACE_COMPILE_DEFINITIONS "${HDF5_${hdf5_lang}_DEFINITIONS}")
+        INTERFACE_COMPILE_DEFINITIONS "${HDF5_${hdf5_lang}_DEFINITIONS}"
+        INTERFACE_LINK_LIBRARIES "${HDF5_${hdf5_lang}_LIBRARIES}")
     endif ()
 
     if (NOT HDF5_FIND_HL)
