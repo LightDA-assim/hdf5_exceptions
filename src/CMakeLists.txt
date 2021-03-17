@@ -1,19 +1,27 @@
 find_package(fortran_exceptions REQUIRED)
-find_package(HDF5 COMPONENTS Fortran REQUIRED)
-
-include(HDF5Targets)
+find_package(HDF5 COMPONENTS Fortran)
+find_package(hdf5 COMPONENTS Fortran)
 
 set(HDF5_EXCEPTIONS_SOURCES hdf5_exceptions.F90)
 add_library(hdf5_exceptions SHARED ${HDF5_EXCEPTIONS_SOURCES})
 target_include_directories(hdf5_exceptions INTERFACE
   $<INSTALL_INTERFACE:${Fortran_MODULE_DIRECTORY}>)
-if(TARGET(hdf5_fortran-static))
-  target_link_libraries(hdf5_exceptions PUBLIC hdf5_fortran-static)
-elseif(TARGET(hdf5_fortran-shared))
-  target_link_libraries(hdf5_exceptions PUBLIC hdf5_fortran-shared)
-else()
+
+if(hdf5_FOUND)
+  if(TARGET "hdf5_fortran-static" )
+    target_link_libraries(hdf5_exceptions PUBLIC hdf5_fortran-static)
+  elseif(TARGET "hdf5_fortran-shared")
+    target_link_libraries(hdf5_exceptions PUBLIC hdf5_fortran-shared)
+  else()
+    message(FATAL_ERROR "No HDF5 targets found")
+  endif()
+elseif(HDF5_FOUND)
+  include(HDF5Targets)
   target_link_libraries(hdf5_exceptions PUBLIC hdf5::hdf5_fortran)
+else()
+  message(FATAL_ERROR "No HDF5 package found")
 endif()
+
 target_link_libraries(hdf5_exceptions PUBLIC fortran_exceptions)
 install(TARGETS hdf5_exceptions
   EXPORT hdf5_exceptions
