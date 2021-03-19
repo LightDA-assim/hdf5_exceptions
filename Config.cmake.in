@@ -4,8 +4,8 @@ include("${CMAKE_CURRENT_LIST_DIR}/hdf5_exceptionsTargets.cmake")
 
 include(CMakeFindDependencyMacro)
 
-find_dependency(HDF5 COMPONENTS Fortran)
-find_dependency(hdf5 COMPONENTS Fortran)
+find_package(HDF5 COMPONENTS Fortran)
+find_package(hdf5 COMPONENTS Fortran)
 
 if(HDF5_FOUND AND NOT TARGET hdf5::hdf5_fortran)
   include("${CMAKE_CURRENT_LIST_DIR}/HDF5Targets.cmake")
