@@ -1,4 +1,4 @@
-find_package(HDF5 COMPONENTS Fortran REQUIRED)
+find_package(HDF5 COMPONENTS Fortran)
 
 if (HDF5_FOUND)
   if (NOT TARGET HDF5::HDF5)
