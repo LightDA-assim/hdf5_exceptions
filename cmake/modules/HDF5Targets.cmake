@@ -1,6 +1,11 @@
 find_package(HDF5 COMPONENTS Fortran)
 
 if (HDF5_FOUND)
+
+  # Older versions of FindHDF5 (before CMake 3.19) don't export any targets.
+  # We now check for HDF5 targets, and if they aren't found we create
+  # imported targets using the result variables populated by FindHDF5
+
   if (NOT TARGET HDF5::HDF5)
     add_library(HDF5::HDF5 INTERFACE IMPORTED)
     string(REPLACE "-D" "" _hdf5_definitions "${HDF5_DEFINITIONS}")
