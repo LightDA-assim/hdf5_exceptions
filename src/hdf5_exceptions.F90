@@ -44,7 +44,7 @@ contains
 
     if (code == 0) then
       ! No error
-      hdf_result = success
+      allocate (hdf_result, source=success)
       return
     end if
 
@@ -64,7 +64,7 @@ contains
     end if
 #endif
 
-    hdf_result = exc
+    allocate (hdf_result, source=exc)
 
   end function new_hdf5_exception
 
