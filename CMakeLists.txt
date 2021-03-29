@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.0.2)
 
 project(hdf5_exceptions)
 
@@ -70,7 +70,16 @@ set ( SKIP_DOC_GEN FALSE CACHE BOOL
 if ( NOT SKIP_DOC_GEN )
   find_program(FORD ford)
 
-  if(FORD)
+  find_package(PythonInterp)
+
+  set(MARKDOWN_SUPPORTED_PYTHON
+      NOT PYTHON_VERSION_STRING VERSION_LESS 3.5)
+
+    if(NOT SKIP_DOC_GEN AND NOT MARKDOWN_SUPPORTED_PYTHON)
+    message(WARNING "Python version ${PYTHON_VERSION_STRING} is not supported by Python-Markdown, not attempting to build documentation.")
+  endif()
+
+  if(FORD AND NOT MARKDOWN_SUPPORTED_PYTHON)
 
     set(DOC_ROOT "${PROJECT_BINARY_DIR}/doc")
     set(DOC_DIR "${DOC_ROOT}/hdf5_exceptions")
