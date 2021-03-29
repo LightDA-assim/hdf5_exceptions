@@ -16,7 +16,7 @@ if (HDF5_FOUND)
     unset(_hdf5_definitions)
   endif ()
 
-  foreach (hdf5_lang IN LISTS HDF5_LANGUAGE_BINDINGS)
+  foreach (hdf5_lang C Fortran )
     if (hdf5_lang STREQUAL "C")
       set(hdf5_target_name "hdf5")
     elseif (hdf5_lang STREQUAL "CXX")
@@ -31,10 +31,25 @@ if (HDF5_FOUND)
       if (NOT TARGET "hdf5::${hdf5_target_name}")
 	add_library("hdf5::${hdf5_target_name}" INTERFACE IMPORTED)
 	string(REPLACE "-D" "" _hdf5_definitions "${HDF5_${hdf5_lang}_DEFINITIONS}")
+
 	set_target_properties("hdf5::${hdf5_target_name}" PROPERTIES
-          INTERFACE_INCLUDE_DIRECTORIES "${HDF5_${hdf5_lang}_INCLUDE_DIRS}"
-          INTERFACE_COMPILE_DEFINITIONS "${HDF5_${hdf5_lang}_DEFINITIONS}"
           INTERFACE_LINK_LIBRARIES "${HDF5_${hdf5_lang}_LIBRARIES}")
+
+	# Include directories could be in several different variables depending
+	# on CMake version
+	if(DEFINED "HDF5_${hdf5_lang}_INCLUDE_DIRS")
+	  set_target_properties("hdf5::${hdf5_target_name}" PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${HDF5_${hdf5_lang}_INCLUDE_DIRS}"
+            INTERFACE_COMPILE_DEFINITIONS "${HDF5_${hdf5_lang}_DEFINITIONS}")
+	elseif(DEFINED HDF5_INCLUDE_DIRS)
+	  set_target_properties("hdf5::${hdf5_target_name}" PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${HDF5_INCLUDE_DIRS}")
+	elseif(DEFINED HDF5_INCLUDE_DIR)
+	  set_target_properties("hdf5::${hdf5_target_name}" PROPERTIES
+            INTERFACE_INCLUDE_DIRECTORIES "${HDF5_INCLUDE_DIR}")
+	else()
+	  message(SEND_ERROR "hdf5::${hdf5_target_name} was found, but neither HDF5_${hdf5_lang}_INCLUDE_DIRS nor HDF5_INCLUDE_DIRS nor HDF5_INCLUDE_DIR was set.")
+	endif()
       endif ()
 
       if (HDF5_FIND_HL)
