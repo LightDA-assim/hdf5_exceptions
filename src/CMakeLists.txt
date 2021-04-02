@@ -1,6 +1,6 @@
 find_package(fortran_exceptions REQUIRED)
-find_package(HDF5 COMPONENTS Fortran)
-find_package(hdf5 COMPONENTS Fortran)
+find_package(HDF5 COMPONENTS Fortran QUIET)
+find_package(hdf5 COMPONENTS Fortran QUIET)
 
 # Prevent older CMake versions from setting include directories with -isystem,
 # which prevents gfortran from finding Fortran module files
