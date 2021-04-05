@@ -6,14 +6,21 @@ include(CMakeFindDependencyMacro)
 
 # CMake includes a script FindHDF5, while builds of HDF5 with CMake export
 # a package called hdf5. We search for both.
-find_package(HDF5 COMPONENTS Fortran)
-find_package(hdf5 COMPONENTS Fortran)
+find_package(HDF5 COMPONENTS Fortran QUIET)
+find_package(hdf5 COMPONENTS Fortran QUIET)
 
 if(HDF5_FOUND AND NOT TARGET hdf5::hdf5_fortran)
   # Older versions of FindHDF5 (before CMake 3.19) don't export any targets.
   # This package creates imported targets using the result variables populated
   # by FindHDF5.
   include("${CMAKE_CURRENT_LIST_DIR}/HDF5Targets.cmake")
+endif()
+
+if(NOT HDF5_FOUND AND NOT hdf5_FOUND
+    AND NOT TARGET hdf5::hdf5_fortran
+    AND NOT TARGET hdf5_fortran-static
+    AND NOT TARGET hdf5_fortran-shared)
+  message(FATAL_ERROR "No HDF5 package found")
 endif()
 
 if(NOT fortran_exceptions_FOUND AND NOT TARGET fortran_exceptions)
