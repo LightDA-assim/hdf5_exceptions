@@ -18,6 +18,8 @@ set(
 
 find_package(HDF5 COMPONENTS Fortran)
 
+find_package(PythonInterp)
+
 if(NOT ${HDF5_FOUND})
   ExternalProject_Add(
     HDF5
@@ -38,6 +40,7 @@ ExternalProject_Add(
   GIT_REPOSITORY ${fortran_exceptions_GIT_URL}
   GIT_TAG main
   CMAKE_CACHE_ARGS
+        -DPYTHON_EXECUTABLE:PATH=${PYTHON_EXECUTABLE}
         -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/fortran_exceptions)
 
 ExternalProject_Add(hdf5_exceptions
@@ -45,5 +48,6 @@ ExternalProject_Add(hdf5_exceptions
   CMAKE_CACHE_ARGS
     -Dfortran_exceptions_DIR:STRING=${CMAKE_CURRENT_BINARY_DIR}/fortran_exceptions/lib/cmake/fortran_exceptions
     -Dhdf5_DIR:PATH=${HDF5_DIR}
+    -DPYTHON_EXECUTABLE:PATH=${PYTHON_EXECUTABLE}
     -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/hdf5_exceptions
   DEPENDS fortran_exceptions HDF5)
