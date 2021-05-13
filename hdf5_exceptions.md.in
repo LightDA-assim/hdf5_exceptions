@@ -10,6 +10,8 @@ preprocessor: {!.PREPROCESSOR!}
 include: ${FORD_PROJECT_INCLUDES}
 extra_mods: exceptions:file://${fortran_exceptions_DOCDIR}/index.html
 extra_mods: hdf5:https://support.hdfgroup.org/HDF5/doc/fortran/index.html
+license: by
+revision: DISTRIBUTION A: Approved for public release, distribution is unlimited
 ---
 
 hdf5_exceptions provides an [[hdf5_exception]] type for programs using the [fortran_exceptions](file://${fortran_exceptions_DOCDIR}/index.html) library for exception handling. An [[hdf5_exception]] can be thrown in the event of an HDF5 error, providing additional information to the calling function or to the user about the error that occurred.
